@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<body>
+<form  method="post" th:action="@{/register}">
+    <input type="text" id="name" name="name" placeholder="이름">
+    <input type="password" id="password" name="password" placeholder="비밀번호">
+    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="전화번호">
+    <input type="text" id="gender" name="gender" placeholder="성별">
+    <button type="submit">등록</button>
+</form>
+
+
+</body>
+</html>
