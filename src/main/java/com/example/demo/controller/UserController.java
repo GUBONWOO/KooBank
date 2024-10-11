@@ -20,6 +20,7 @@ public class UserController {
     private final UserService userService;
 
 
+
     // 로그인 요청 처리
     @PostMapping("/login")
     public String loginUser(@RequestParam("name") String name, @RequestParam("password") String password, HttpSession session) {

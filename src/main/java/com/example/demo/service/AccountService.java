@@ -5,11 +5,11 @@ import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
@@ -18,25 +18,17 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    public List<Account> getAccountsAll (String number){
-        return accountRepository.findAllByNumber(number);
+    // 모든 계좌 조회 (number 기반)
+    public List<Account> getAccountsAll(int number) {
+        return accountRepository.findAllByNumber(String.valueOf(number));
     }
 
-    // 계좌번호 생성 메서드
+    // 계좌 번호 생성 메서드
     public String generateAccountNumber() {
-        Random random = new Random();
-        String accountNumber;
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date()); // 현재 날짜를 YYYYMMDD 형식으로 가져옴
+        int counter = getAccountCounter(date);  // 중복되지 않는 계좌 번호 생성
 
-        // 중복되지 않는 계좌번호가 나올 때까지 반복
-        do {
-            StringBuilder accountNumberBuilder = new StringBuilder();
-            for (int i = 0; i < 10; i++) {
-                accountNumberBuilder.append(random.nextInt(10));
-            }
-            accountNumber = accountNumberBuilder.toString();
-        } while (accountCheck(accountNumber)); // 중복 여부 검사
-
-        return accountNumber;
+        return date + String.format("%02d", counter);  // 날짜 + 2자리 카운터 형식
     }
 
     // 계좌 저장 메서드
@@ -45,7 +37,8 @@ public class AccountService {
         Users loggedInUser = getLoggedInUser(session);
 
         if (loggedInUser != null) {
-            // 계좌 객체 생성 및 사용자 연결
+
+
             Account account = new Account();
             account.setNumber(accountNumber);
             account.setBalance(0L);  // 기본 잔액 설정
@@ -69,5 +62,11 @@ public class AccountService {
     // 세션에서 로그인한 사용자 정보를 가져오는 메서드
     private Users getLoggedInUser(HttpSession session) {
         return (Users) session.getAttribute("loggedInUser");
+    }
+
+    // 해당 날짜로 계좌 번호 중복 여부 확인 후 다음 번호 생성
+    private int getAccountCounter(String date) {
+        List<Account> accounts = accountRepository.findAllByNumber(date);  // 현재 날짜로 계좌 조회
+        return accounts.size() + 1;  // 이미 생성된 계좌의 개수 + 1 (다음 계좌 번호)
     }
 }

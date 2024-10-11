@@ -19,15 +19,6 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @GetMapping("/show")
-    public String showAccounts(Model model, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        List<Account> accounts = accountService.getAccountsAll(loggedInUser.getName());
-        model.addAttribute("accounts", accounts);
-
-        return "home";  //
-    }
 
 
 

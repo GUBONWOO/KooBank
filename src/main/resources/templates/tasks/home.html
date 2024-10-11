@@ -17,13 +17,15 @@
 <form th:action="@{/logout}" method="post">
     <button type="submit">로그아웃</button>
 </form>
+<div>
 
-<ul>
-    <li th:each="account : ${accounts}">
-        <p>계좌번호: <span th:text="${account.number}"></span></p>
-        <p>잔액: <span th:text="${account.balance}"></span></p>
-    </li>
-</ul>
+    <ul>
+        <li th:each="account : ${accounts}">
+            <p>계좌번호: <span th:text="${account.number}"></span></p>
+            <p>잔액: <span th:text="${account.balance}"></span></p>
+        </li>
+    </ul>
+</div>
 
 </body>
 </html>

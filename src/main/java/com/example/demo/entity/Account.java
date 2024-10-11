@@ -29,6 +29,8 @@ public class Account {
     @Column(length = 1)
     private int status;
 
+    private int sequence ;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
