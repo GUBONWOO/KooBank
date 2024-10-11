@@ -31,9 +31,9 @@ public class Users {
     private String gender;
 
     @NotNull
-    @Digits(integer = 10,fraction = 1)
+    @Size( min= 1,max=8)
     @Column(length = 10)
-    private int phoneNumber;
+    private String phoneNumber;
 
     @NotNull
     @Size(min = 8, max = 20)
@@ -44,5 +44,5 @@ public class Users {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Account> accounts;
 
-    // Getters and Setters
+
 }

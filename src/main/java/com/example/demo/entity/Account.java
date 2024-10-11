@@ -14,7 +14,7 @@ public class Account {
     @NotNull
     @Size(min =10, max = 10)
     @Column(length = 10)
-    private int number;
+    private String number;
 
     @NotNull
     @Size(min = 1, max = 32)

@@ -21,9 +21,9 @@ public class History {
     private int status;
 
     @NotNull
-    @Size(min =1, max =10)
+    @Size(min =10, max =10)
     @Column(length = 10)
-    private int recipient_account;
+    private String recipient_account;
 
     @NotNull
     @Size(min =1, max =20)
@@ -31,7 +31,7 @@ public class History {
     private  Long transaction_amount;
 
 
- @ManyToOne
+    @ManyToOne
     @JoinColumn(name="account_number", referencedColumnName = "number")
     private Account account;
 
