@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -12,17 +15,17 @@ public class Account {
 
     @Id
     @NotNull
-    @Size(min =10, max = 10)
+    @Digits(integer =10 ,fraction = 1)
     @Column(length = 10)
     private String number;
 
     @NotNull
-    @Size(min = 1, max = 32)
+    @Digits(integer =32 ,fraction = 1)
     @Column(length = 32)
     private Long balance;
 
     @NotNull
-    @Size(max = 1)
+    @Digits(integer =1 ,fraction = 1)
     @Column(length = 1)
     private int status;
 

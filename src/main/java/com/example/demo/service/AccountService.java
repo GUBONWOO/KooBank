@@ -5,8 +5,10 @@ import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -15,6 +17,10 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+
+    public List<Account> getAccountsAll (String number){
+        return accountRepository.findAllByNumber(number);
+    }
 
     // 계좌번호 생성 메서드
     public String generateAccountNumber() {

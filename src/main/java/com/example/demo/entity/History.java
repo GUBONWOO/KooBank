@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transaction;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -26,8 +27,8 @@ public class History {
     private String recipient_account;
 
     @NotNull
-    @Size(min =1, max =20)
-    @Column(length = 20)
+    @Digits(integer =15 ,fraction = 1)
+    @Column(length = 15)
     private  Long transaction_amount;
 
 
