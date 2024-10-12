@@ -9,6 +9,7 @@ import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.List;
+
 @Data
 @Entity
 public class Account {
@@ -28,6 +29,9 @@ public class Account {
     @Digits(integer =1 ,fraction = 1)
     @Column(length = 1)
     private int status;
+
+    private String accountDate;
+
 
     private int sequence ;
 

@@ -19,16 +19,20 @@ public class AccountController {
 
     private final AccountService accountService;
 
-
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(@RequestParam String accountNumber) {
+        if (!accountNumber.isEmpty()) {
+            accountService.deleteAccount(accountNumber);
+        }
+        // 삭제 후 홈 페이지로 리다이렉트
+        return "redirect:/home";
+    }
 
 
     @PostMapping("/createAccount")
     public String createAccount(HttpSession session) {
-        // 계좌번호 생성 및 세션을 사용한 계좌 저장
-        String accountNumber = accountService.generateAccountNumber();
-        accountService.saveAccount(accountNumber, session);
+        accountService.saveAccount(session);
 
-        // 계좌 생성 후 홈 페이지로 리다이렉트
         return "redirect:/home";
     }
 }

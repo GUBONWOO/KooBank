@@ -13,18 +13,22 @@
 <a th:href="@{/history}">이력</a>
 <form th:action="@{createAccount}" method="post">
     <button type="submit">계좌 추가</button>
+
 </form>
 <form th:action="@{/logout}" method="post">
     <button type="submit">로그아웃</button>
 </form>
 <div>
-
-    <ul>
-        <li th:each="account : ${accounts}">
-            <p>계좌번호: <span th:text="${account.number}"></span></p>
-            <p>잔액: <span th:text="${account.balance}"></span></p>
-        </li>
-    </ul>
+<form action="deleteAccount" method="post">
+    <select name="accountNumber">
+        <option value="">계좌 선택</option>
+        <option th:each="account : ${accounts}"
+                th:value="${account.number}"
+                th:text="${account.number + ' (잔액: ' + account.balance + ')'}">
+        </option>
+    </select>
+    <button type="submit">계좌 삭제</button>
+</form>
 </div>
 
 </body>
