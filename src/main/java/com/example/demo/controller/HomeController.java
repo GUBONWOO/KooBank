@@ -59,6 +59,9 @@ public class HomeController {
             List<Account> accounts = accountService.getAccountsAll(loggedInUser.getId());
             model.addAttribute("accounts", accounts);
 
+             Account selectedAccount = (Account) session.getAttribute("selectedAccount");
+             model.addAttribute("selectedAccount", selectedAccount);
+
             return "/tasks/home";
 
     }

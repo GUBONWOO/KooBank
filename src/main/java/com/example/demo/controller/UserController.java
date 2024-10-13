@@ -28,14 +28,14 @@ public class UserController {
         user.setName(name);
         user.setPassword(password);
 
-        // 로그인 확인
+
         Optional<Users> loggedInUser = userService.checkIf(user);
 
         if (loggedInUser.isPresent()) {
             session.setAttribute("loggedInUser", loggedInUser.get());  // 세션에 로그인한 사용자 저장
-            return "redirect:/home";  // 로그인 성공 시 홈 페이지로 리다이렉트
+            return "redirect:/home";
         } else {
-            return "redirect:/";  // 로그인 실패 시 에러 메시지와 함께 로그인 페이지로 리다이렉트
+            return "redirect:/";
         }
 
 

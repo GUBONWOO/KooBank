@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
     // 계좌 번호로 계좌 조회
-    Optional<Account> findByNumber(String number);
+    Account findByNumber(String number);
 
     // 동일한 계좌 번호(날짜 기반)로 계좌 리스트 조회
     List<Account> findAllByUserId(int userId);

@@ -3,15 +3,11 @@ import com.example.demo.entity.Account;
 import com.example.demo.service.AccountService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -20,11 +16,13 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/deleteAccount")
-    public String deleteAccount(@RequestParam String accountNumber) {
+    public String deleteAccount(@RequestParam String accountNumber,HttpSession session) {
         if (!accountNumber.isEmpty()) {
             accountService.deleteAccount(accountNumber);
         }
-        // 삭제 후 홈 페이지로 리다이렉트
+        session.removeAttribute("selectedAccount");
+
+
         return "redirect:/home";
     }
 
@@ -35,4 +33,27 @@ public class AccountController {
 
         return "redirect:/home";
     }
+    @PostMapping("/selectAccount")
+    public String selectAccount(@RequestParam String accountNumber, HttpSession session) {
+
+        Account selectedAccount = accountService.findByNumber(accountNumber);
+
+
+        session.setAttribute("selectedAccount", selectedAccount);
+
+        return "redirect:/home";
+    }
+    @PostMapping("/deposit")
+    public String deposit(@RequestParam String accountNumber, @RequestParam int amount, HttpSession session) {
+
+        accountService.deposit(accountNumber, amount);
+
+
+        Account updatedAccount = accountService.findByNumber(accountNumber);
+        session.setAttribute("selectedAccount", updatedAccount);
+
+
+        return "redirect:/home";
+    }
+
 }

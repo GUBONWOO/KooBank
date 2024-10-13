@@ -25,12 +25,13 @@ public class AccountService {
         return accountRepository.findAllByUserId(userId);
     }
 
-//     계좌 번호 생성 메서드
+    //     계좌 번호 생성 메서드
     public String generateAccountNumber(String accountDate, int sequence) {
-        return accountDate + String.format("%02d",sequence);
+        return accountDate + String.format("%02d", sequence);
 
     }
-//
+
+    //
     // 계좌 저장 메서드
     public void saveAccount(HttpSession session) {
         // 세션에서 로그인한 사용자 정보 가져오기
@@ -40,11 +41,11 @@ public class AccountService {
 
             Account account = new Account();
 
-            String accountDate =new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String accountDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
 
-            int newSequence = accountRepository.getSequenceSQL() +1;
+            int newSequence = accountRepository.getSequenceSQL() + 1;
 //
-            String accountNumber = generateAccountNumber(accountDate,newSequence);
+            String accountNumber = generateAccountNumber(accountDate, newSequence);
 
             account.setNumber(accountNumber);
             account.setBalance(0L);
@@ -64,9 +65,24 @@ public class AccountService {
     private Users getLoggedInUser(HttpSession session) {
         return (Users) session.getAttribute("loggedInUser");
     }
+
     @Transactional
     public void deleteAccount(String accountNumber) {
         accountRepository.deleteByNumber(accountNumber);
     }
 
+    public Account findByNumber(String number) {
+        return accountRepository.findByNumber(number);
+    }
+
+    ;
+
+    public void deposit(String number, int amount) {
+        Account account = accountRepository.findByNumber(number);
+        if (account != null) {
+            account.setBalance(account.getBalance() + amount); // 잔액 업데이트
+            accountRepository.save(account); // 업데이트된 계좌 저장
+        }
+
+    }
 }

@@ -1,35 +1,51 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>은행 어플</title>
 </head>
 <body>
 <h1>은행 어플</h1>
-<a th:href="@{/deposit}">입금</a>
-<a th:href="@{/withdraw}">출금</a>
-<a th:href="@{/transfer}">송금</a>
-<a th:href="@{/history}">이력</a>
-<form th:action="@{createAccount}" method="post">
-    <button type="submit">계좌 추가</button>
 
-</form>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">로그아웃</button>
-</form>
-<div>
-<form action="deleteAccount" method="post">
-    <select name="accountNumber">
+<!-- 계좌 선택 폼 -->
+<form th:action="@{/selectAccount}" method="post">
+    <select name="accountNumber" onchange="this.form.submit()">
         <option value="">계좌 선택</option>
         <option th:each="account : ${accounts}"
                 th:value="${account.number}"
-                th:text="${account.number + ' (잔액: ' + account.balance + ')'}">
+                th:text="${account.number + ' (잔액: ' + account.balance + ')'}"
+                th:selected="${selectedAccount != null and account.number == selectedAccount.number}">
         </option>
     </select>
-    <button type="submit">계좌 삭제</button>
 </form>
+
+<!-- 선택된 계좌가 있을 때만 입금 및 삭제 폼 활성화 -->
+<div th:if="${selectedAccount != null}">
+    <h2>선택된 계좌: <span th:text="${selectedAccount.number}"></span></h2>
+    <h3>잔액: <span th:text="${selectedAccount.balance}"></span></h3>
+
+    <!-- 입금 폼 -->
+    <form th:action="@{/deposit}" method="post">
+        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+        <label for="amount">입금 금액:</label>
+        <input type="number" id="amount" name="amount" required>
+        <button type="submit">입금</button>
+    </form>
+
+    <!-- 계좌 삭제 폼 -->
+    <form th:action="@{/deleteAccount}" method="post">
+        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+        <button type="submit">계좌 삭제</button>
+    </form>
 </div>
+
+<hr/>
+
+<!-- 기존 계좌 추가 폼 -->
+<h2>새 계좌 추가</h2>
+<form th:action="@{/createAccount}" method="post">
+    <button type="submit">계좌 추가</button>
+</form>
 
 </body>
 </html>
