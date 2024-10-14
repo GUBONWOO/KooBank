@@ -41,8 +41,8 @@ public class Users {
     private String password;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Account> accounts;
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<Account> accounts;
 
 
 }

@@ -60,7 +60,12 @@ public class HomeController {
             model.addAttribute("accounts", accounts);
 
              Account selectedAccount = (Account) session.getAttribute("selectedAccount");
-             model.addAttribute("selectedAccount", selectedAccount);
+
+             if (selectedAccount != null) {
+                 Account current = accountService.findByNumber(selectedAccount.getNumber() );
+                 model.addAttribute("selectedAccount", current);
+             }
+//             model.addAttribute("selectedAccount", current);
 
             return "/tasks/home";
 

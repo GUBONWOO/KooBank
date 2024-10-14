@@ -22,6 +22,7 @@
 <!-- 선택된 계좌가 있을 때만 입금 및 삭제 폼 활성화 -->
 <div th:if="${selectedAccount != null}">
     <h2>선택된 계좌: <span th:text="${selectedAccount.number}"></span></h2>
+<!--    리다이랙트 시 추가 한 에이피아이 기능을 항상 호출하여, 그 대상 어카운트 정보 표시하게 처리-->
     <h3>잔액: <span th:text="${selectedAccount.balance}"></span></h3>
 
     <!-- 입금 폼 -->
@@ -30,6 +31,22 @@
         <label for="amount">입금 금액:</label>
         <input type="number" id="amount" name="amount" required>
         <button type="submit">입금</button>
+    </form>
+
+    <form th:action="@{/withdraw}" method="post">
+        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+        <label for="withdrawAmount">출금 금액:</label>
+        <input type="number" id="withdrawAmount" name="amount" required>
+        <button type="submit">출금</button>
+    </form>
+
+    <form th:action="@{/transaction}" method="post">
+        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+        <label for="transaction">송금금액:</label>
+        <input type="number" id="transaction" name="amount" required>
+        <label for="transactionNumber">계좌번호</label>
+        <input type="number" id="transactionNumber" name="transactionNumber" required >
+        <button type="submit">송금</button>
     </form>
 
     <!-- 계좌 삭제 폼 -->

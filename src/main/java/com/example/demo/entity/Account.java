@@ -40,7 +40,7 @@ public class Account {
     private Users user;
 
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)  //
-    private List<History> histories;
+//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)  //
+//    private List<History> histories;
 
 }
