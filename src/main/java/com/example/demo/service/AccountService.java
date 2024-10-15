@@ -2,6 +2,7 @@ package com.example.demo.service;
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.AccountRepository;
+import com.example.demo.repository.HistoryRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final HistoryService historyService;
 
     // 모든 계좌 조회 (number 기반)
     public List<Account> getAccountsAll(int userId) {
@@ -84,6 +86,7 @@ public class AccountService {
         if (account != null) {
             account.setBalance(account.getBalance() + amount); // 잔액 업데이트
             accountRepository.save(account); // 업데이트된 계좌 저장
+            historyService.logTransactionHistory(account, number, amount, 1);
         }
 
 
@@ -91,9 +94,10 @@ public class AccountService {
     }
     public void withdraw(String number, long amount) {
         Account account = accountRepository.findByNumber(number);
-        if (account != null && amount < account.getBalance()) {
+        if (account != null && amount <= account.getBalance()) {
             account.setBalance(account.getBalance() - amount); // 잔액 업데이트
             accountRepository.save(account); // 업데이트된 계좌 저장
+            historyService.logTransactionHistory(account, number, amount, 2);
         }
 }
     @Transactional
@@ -104,13 +108,16 @@ public class AccountService {
             account.setBalance(account.getBalance() - amount); // 잔액 업데이트
             accountRepository.save(account); // 업데이트된 계좌 저장
 
-        }
+        }     historyService.logTransactionHistory(account, transactionNumber, amount, 3);
+
         Account transaction = accountRepository.findByNumber(transactionNumber);
         if (transaction != null) {
             transaction.setBalance(transaction.getBalance() + amount); // 잔액 업데이트
             accountRepository.save(transaction); // 업데이트된 계좌 저장
 
         }
+        historyService.logTransactionHistory(transaction, number, amount, 4);
         return account;
     }
+
 }

@@ -4,10 +4,8 @@ import com.example.demo.entity.Users;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,7 +30,7 @@ public class UserController {
         Optional<Users> loggedInUser = userService.checkIf(user);
 
         if (loggedInUser.isPresent()) {
-            session.setAttribute("loggedInUser", loggedInUser.get());  // 세션에 로그인한 사용자 저장
+            session.setAttribute("loggedInUser", loggedInUser.get());
             return "redirect:/home";
         } else {
             return "redirect:/";

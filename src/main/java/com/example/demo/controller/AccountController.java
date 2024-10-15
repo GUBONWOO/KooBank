@@ -38,9 +38,7 @@ public class AccountController {
     }
     @PostMapping("/selectAccount")
     public String selectAccount(@RequestParam String accountNumber, HttpSession session) {
-
         Account selectedAccount = accountService.findByNumber(accountNumber);
-
         session.setAttribute("selectedAccount", selectedAccount);
 
         return "redirect:/home";
@@ -63,7 +61,6 @@ public class AccountController {
     public String transaction(@RequestParam String accountNumber, @RequestParam long amount
             ,@RequestParam String transactionNumber ,HttpSession session) {
              accountService.transaction( accountNumber, amount,transactionNumber);
-//        session.setAttribute("transactionAccounts", result);
 
         return "redirect:/home";
     }

@@ -1,13 +1,11 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transaction;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.List;
 @Data
 @Entity
 public class History {
@@ -17,7 +15,7 @@ public class History {
     private int id;
 
     @NotNull
-    @Size(max =1)
+    @Digits(integer = 1,fraction = 0)
     @Column(length =1)
     private int status;
 
@@ -27,7 +25,7 @@ public class History {
     private String recipient_account;
 
     @NotNull
-    @Digits(integer =15 ,fraction = 1)
+    @Digits(integer =15 ,fraction = 0)
     @Column(length = 15)
     private  Long transaction_amount;
 
@@ -35,5 +33,7 @@ public class History {
     @ManyToOne
     @JoinColumn(name="account_number", referencedColumnName = "number")
     private Account account;
+
+
 
 }

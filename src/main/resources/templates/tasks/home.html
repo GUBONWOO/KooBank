@@ -2,67 +2,230 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>은행 어플</title>
+    <style>
+        body {
+    background-color: #f7f7f7;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    text-align: center;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.account-info {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.account-info h2,
+.account-info h3 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.account-info h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.account-info h3 {
+    font-size: 20px;
+    font-weight: normal;
+    color: #28a745;
+}
+.form-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+    padding: 15px;
+<!--    border: 1px solid #e0e0e0; /* 경계선 색상 */-->
+<!--    border-radius: 8px; /* 모서리 둥글게 */-->
+    background-color: #ffffff; /* 배경색 흰색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    box-sizing: border-box; /
+}
+
+.form-group label {
+    margin-bottom: 5px; /* 라벨과 입력 필드 간의 간격 */
+    font-weight: bold; /* 라벨을 볼드체로 */
+}
+
+.form-control {
+ width: 30%;
+    border-radius: 4px; /* 입력 필드 모서리 둥글게 */
+    border: 1px solid #ced4da; /* 기본 경계선 색상 */
+    transition: border-color 0.2s; /* 경계선 색상 변경 시 애니메이션 효과 */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* 포커스 시 경계선 색상 */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 포커스 시 그림자 효과 */
+}
+
+.
+
+    </style>
 </head>
 <body>
-<h1>은행 어플</h1>
 
-<!-- 계좌 선택 폼 -->
-<form th:action="@{/selectAccount}" method="post">
-    <select name="accountNumber" onchange="this.form.submit()">
-        <option value="">계좌 선택</option>
-        <option th:each="account : ${accounts}"
-                th:value="${account.number}"
-                th:text="${account.number + ' (잔액: ' + account.balance + ')'}"
-                th:selected="${selectedAccount != null and account.number == selectedAccount.number}">
-        </option>
-    </select>
-</form>
+<div class="container">
+    <h1 class="text-center">은행 어플</h1>
 
-<!-- 선택된 계좌가 있을 때만 입금 및 삭제 폼 활성화 -->
-<div th:if="${selectedAccount != null}">
-    <h2>선택된 계좌: <span th:text="${selectedAccount.number}"></span></h2>
-<!--    리다이랙트 시 추가 한 에이피아이 기능을 항상 호출하여, 그 대상 어카운트 정보 표시하게 처리-->
-    <h3>잔액: <span th:text="${selectedAccount.balance}"></span></h3>
+    <!-- 새로운 계좌 추가 폼 -->
+    <!--    <h2 class="text-center">새 계좌 추가</h2>-->
+    <div class="text-end">
+        <form th:action="@{/createAccount}" method="post" class="mb-4">
+            <button type="submit" class="btn btn-success">계좌 추가</button>
+        </form>
+    </div>
 
-    <!-- 입금 폼 -->
-    <form th:action="@{/deposit}" method="post">
-        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
-        <label for="amount">입금 금액:</label>
-        <input type="number" id="amount" name="amount" required>
-        <button type="submit">입금</button>
+    <!-- 계좌 선택 폼 -->
+    <form th:action="@{/selectAccount}" method="post" class="mb-4">
+        <div class="mb-3">
+            <label for="accountNumber" class="form-label">계좌 선택:</label>
+            <select name="accountNumber" id="accountNumber" class="form-select" onchange="this.form.submit()">
+                <option value="">계좌 선택</option>
+                <option th:each="account : ${accounts}"
+                        th:value="${account.number}"
+                        th:text="${account.number + ' (잔액: ' + account.balance + ')'}"
+                        th:selected="${selectedAccount != null and account.number == selectedAccount.number}">
+                </option>
+            </select>
+        </div>
     </form>
 
-    <form th:action="@{/withdraw}" method="post">
-        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
-        <label for="withdrawAmount">출금 금액:</label>
-        <input type="number" id="withdrawAmount" name="amount" required>
-        <button type="submit">출금</button>
-    </form>
+    <!-- 거래 내역 -->
+    <h2 class="text-center">거래 내역</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>내 계좌</th>
+            <th>보낸 계좌</th>
+            <th>금액</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="history : ${historyList}">
+            <td th:text="${history.account.number}"></td>
+            <td th:text="${history.recipient_account}"></td>
+            <td th:text="${history.transaction_amount}"></td>
+            <td>
+                    <span th:switch="${history.status}">
+                        <span th:case="1" class="text-primary">입금</span>
+                        <span th:case="2" class="text-danger">출금</span>
+                        <span th:case="3" class="text-danger">송금</span>
+                        <span th:case="4" class="text-primary">송금</span>
+                    </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-    <form th:action="@{/transaction}" method="post">
-        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
-        <label for="transaction">송금금액:</label>
-        <input type="number" id="transaction" name="amount" required>
-        <label for="transactionNumber">계좌번호</label>
-        <input type="number" id="transactionNumber" name="transactionNumber" required >
-        <button type="submit">송금</button>
-    </form>
+    <div th:if="${selectedAccount != null}">
+        <div th:if="${selectedAccount != null}" class="account-info">
+            <h2>선택된 계좌: <span th:text="${selectedAccount.number}"></span></h2>
+            <h3>잔액: <span th:text="${selectedAccount.balance}"></span> 원</h3>
+        </div>
+        <!-- 계좌 삭제 폼 -->
+        <div class="button-container mb-4" style="text-align: right;">
+            <form th:action="@{/deleteAccount}" method="post">
+                <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+                <button type="submit" class="btn btn-warning">계좌 삭제</button>
+            </form>
+        </div>
 
-    <!-- 계좌 삭제 폼 -->
-    <form th:action="@{/deleteAccount}" method="post">
-        <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
-        <button type="submit">계좌 삭제</button>
-    </form>
+        <!-- 입금 폼 -->
+<!--        <form th:action="@{/deposit}" method="post" class="mb-4">-->
+<!--            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">-->
+<!--            <label for="amount" class="form-label">입금 금액:</label>-->
+<!--            <input type="number" id="amount" name="amount" class="form-control" required>-->
+<!--            <button type="submit" class="btn btn-primary mt-2">입금</button>-->
+<!--        </form>-->
+
+<!--        &lt;!&ndash; 출금 폼 &ndash;&gt;-->
+<!--        <form th:action="@{/withdraw}" method="post" class="mb-4">-->
+<!--            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">-->
+<!--            <label for="withdrawAmount" class="form-label">출금 금액:</label>-->
+<!--            <input type="number" id="withdrawAmount" name="amount" class="form-control" required>-->
+<!--            <button type="submit" class="btn btn-danger mt-2">출금</button>-->
+<!--        </form>-->
+
+<!--        &lt;!&ndash; 송금 폼 &ndash;&gt;-->
+<!--        <form th:action="@{/transaction}" method="post" class="mb-4">-->
+<!--            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">-->
+<!--            <label for="transaction" class="form-label">송금 금액:</label>-->
+<!--            <input type="number" id="transaction" name="amount" class="form-control" required>-->
+<!--            <label for="transactionNumber" class="form-label">계좌번호:</label>-->
+<!--            <input type="number" id="transactionNumber" name="transactionNumber" class="form-control" required>-->
+<!--            <button type="submit" class="btn btn-info mt-2">송금</button>-->
+<!--        </form>--> <!-- 입금 폼 -->
+        <!-- 입금 폼 -->
+        <form th:action="@{/deposit}" method="post" class="mb-4 form-group">
+            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+            <label for="amount" class="form-label">입금 금액:</label>
+            <input type="number" id="amount" name="amount" class="form-control" required>
+            <button type="submit" class="btn btn-primary mt-2">입금</button>
+        </form>
+
+        <!-- 출금 폼 -->
+        <form th:action="@{/withdraw}" method="post" class="mb-4 form-group">
+            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+            <label for="withdrawAmount" class="form-label">출금 금액:</label>
+            <input type="number" id="withdrawAmount" name="amount" class="form-control" required>
+            <button type="submit" class="btn btn-danger mt-2">출금</button>
+        </form>
+
+        <!-- 송금 폼 -->
+        <form th:action="@{/transaction}" method="post" class="mb-4 form-group">
+            <input type="hidden" name="accountNumber" th:value="${selectedAccount.number}">
+            <label for="transaction" class="form-label">송금 금액:</label>
+            <input type="number" id="transaction" name="amount" class="form-control" required>
+            <label for="transactionNumber" class="form-label">계좌번호:</label>
+            <input type="number" id="transactionNumber" name="transactionNumber" class="form-control" required>
+            <button type="submit" class="btn btn-info mt-2">송금</button>
+        </form>
+
+
+
+
+    </div>
+
+    <hr/>
+
+
+    <!-- 로그아웃 폼 -->
+<!--    <h2 class="text-center">로그아웃</h2>-->
+    <div class="button-container mb-4" style="text-align: right;">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-secondary">로그아웃</button>
+        </form>
+    </div>
+
 </div>
 
-<hr/>
-
-<!-- 기존 계좌 추가 폼 -->
-<h2>새 계좌 추가</h2>
-<form th:action="@{/createAccount}" method="post">
-    <button type="submit">계좌 추가</button>
-</form>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<!--<input type="date">-->

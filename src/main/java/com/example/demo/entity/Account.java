@@ -39,8 +39,8 @@ public class Account {
     @JoinColumn(name = "user_id")
     private Users user;
 
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<History> histories;
 
-//    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)  //
-//    private List<History> histories;
 
 }
