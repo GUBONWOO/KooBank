@@ -36,7 +36,7 @@ public class Users {
     private String phoneNumber;
 
     @NotNull
-    @Size(min = 8, max = 20 )
+    @Size(min = 8, max = 20 ,message = "비밀번호를 8~20 자")
     @Column(length = 20)
     private String password;
 

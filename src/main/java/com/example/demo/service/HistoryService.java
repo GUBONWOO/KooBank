@@ -29,4 +29,8 @@ public class HistoryService {
     public List<History> findByAccount(Account account) {
         return historyRepository.findByAccount(account);
     }
+    public List<History> getAccountHistory(String accountNumber) {
+        Account account = accountRepository.findByNumber(accountNumber);
+        return findByAccount(account);
+    }
 }

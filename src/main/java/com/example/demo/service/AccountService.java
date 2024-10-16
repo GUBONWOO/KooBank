@@ -19,6 +19,8 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final HistoryService historyService;
+    private final EmailService emailService;
+    private final YourService yourService;
 
     // 모든 계좌 조회 (number 기반)
     public List<Account> getAccountsAll(int userId) {
@@ -112,6 +114,8 @@ public class AccountService {
 
         }
         historyService.logTransactionHistory(transaction, number, amount, 4);
+        yourService.sendSampleEmail();
+//        emailService.sendEmail(recipientEmail, subject, body);
         return account;
     }
 
