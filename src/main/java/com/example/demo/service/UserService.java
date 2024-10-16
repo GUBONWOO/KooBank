@@ -12,14 +12,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    public boolean checkDuplicateUser(String name) {
+        return userRepository.findByName(name).isPresent(); // 아이디가 있으면 true 반환
+    }
 
     public void createUser(Users user) {
         userRepository.save(user);
     }
 
     public Optional<Users> checkIf(Users user) {
-        // 사용자 검색 및 비밀번호 체크
         return userRepository.findByName(user.getName())
                 .filter(foundUser -> foundUser.getPassword().equals(user.getPassword()));
     }

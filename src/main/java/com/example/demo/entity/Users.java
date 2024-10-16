@@ -1,14 +1,13 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
-import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +19,10 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+
     @NotNull
     @Size(min = 1, max = 10)
-    @Column(length = 10)
+    @Column(length = 10,unique = true)
     private String name;
 
     @NotNull
@@ -36,13 +36,11 @@ public class Users {
     private String phoneNumber;
 
     @NotNull
-    @Size(min = 8, max = 20)
+    @Size(min = 8, max = 20 )
     @Column(length = 20)
     private String password;
 
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<Account> accounts;
 
 
 }

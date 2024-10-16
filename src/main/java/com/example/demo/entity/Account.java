@@ -2,12 +2,8 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
-
 import java.util.List;
 
 @Data
@@ -31,7 +27,6 @@ public class Account {
     private int status;
 
     private String accountDate;
-
 
     private int sequence ;
 

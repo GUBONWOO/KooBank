@@ -1,20 +1,16 @@
 package com.example.demo.service;
+
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Users;
 import com.example.demo.repository.AccountRepository;
-import com.example.demo.repository.HistoryRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.swing.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -65,7 +61,6 @@ public class AccountService {
         }
     }
 
-    // 세션에서 로그인한 사용자 정보를 가져오는 메서드
     private Users getLoggedInUser(HttpSession session) {
         return (Users) session.getAttribute("loggedInUser");
     }
@@ -84,8 +79,8 @@ public class AccountService {
     public void deposit(String number, long amount) {
         Account account = accountRepository.findByNumber(number);
         if (account != null) {
-            account.setBalance(account.getBalance() + amount); // 잔액 업데이트
-            accountRepository.save(account); // 업데이트된 계좌 저장
+            account.setBalance(account.getBalance() + amount);
+            accountRepository.save(account);
             historyService.logTransactionHistory(account, number, amount, 1);
         }
 
@@ -95,8 +90,8 @@ public class AccountService {
     public void withdraw(String number, long amount) {
         Account account = accountRepository.findByNumber(number);
         if (account != null && amount <= account.getBalance()) {
-            account.setBalance(account.getBalance() - amount); // 잔액 업데이트
-            accountRepository.save(account); // 업데이트된 계좌 저장
+            account.setBalance(account.getBalance() - amount);
+            accountRepository.save(account);
             historyService.logTransactionHistory(account, number, amount, 2);
         }
 }
@@ -105,15 +100,15 @@ public class AccountService {
 
         Account account = accountRepository.findByNumber(number);
         if (account != null && amount <= account.getBalance()) {
-            account.setBalance(account.getBalance() - amount); // 잔액 업데이트
-            accountRepository.save(account); // 업데이트된 계좌 저장
+            account.setBalance(account.getBalance() - amount);
+            accountRepository.save(account);
 
         }     historyService.logTransactionHistory(account, transactionNumber, amount, 3);
 
         Account transaction = accountRepository.findByNumber(transactionNumber);
         if (transaction != null) {
-            transaction.setBalance(transaction.getBalance() + amount); // 잔액 업데이트
-            accountRepository.save(transaction); // 업데이트된 계좌 저장
+            transaction.setBalance(transaction.getBalance() + amount);
+            accountRepository.save(transaction);
 
         }
         historyService.logTransactionHistory(transaction, number, amount, 4);
