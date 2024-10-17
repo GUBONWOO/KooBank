@@ -96,7 +96,7 @@ public class AccountService {
             accountRepository.save(account);
             historyService.logTransactionHistory(account, number, amount, 2);
         }
-}
+    }
     @Transactional
     public  Account transaction(String number, long amount,String transactionNumber) {
 
